@@ -1,15 +1,33 @@
 # Admin Dashboard
 
+![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=flat&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Anthropic](https://img.shields.io/badge/Anthropic_Claude-D97706?style=flat&logo=anthropic&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat&logo=cloudflare&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
 **Multi-panel admin console with Security Intelligence Center (SIC) — AI-powered security analysis, vulnerability assessment, and access control validation.**
 
-> A full-featured admin dashboard for platform operations. Seven specialized panels cover analytics, user management, content moderation, growth tracking, creator scoring, and security. The Security Intelligence Center (SIC) tab is an AI-powered security analysis layer that continuously audits the platform for vulnerabilities, validates access controls, and generates compliance reports.
+> A full-featured platform operations dashboard with seven specialized panels. The Security Intelligence Center (SIC) tab uses Claude's extended thinking to audit the platform for vulnerabilities, validate access controls, and generate structured compliance reports.
+
+---
+
+## Table of Contents
+
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Panels](#panels)
+- [Security Intelligence Center (SIC)](#security-intelligence-center-sic)
+- [Security (Meta)](#security-meta)
+- [Recent Additions](#recent-additions)
+- [Running This](#running-this)
 
 ---
 
 ## Architecture
 
 ```
-Browser (admin-authenticated)
+Browser  (admin-authenticated)
   │
   ▼
 Next.js 15  (App Router · admin auth gate)
@@ -35,88 +53,67 @@ Next.js 15  (App Router · admin auth gate)
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 15, App Router, React |
-| Admin Auth | API key gate + session validation |
-| AI (SIC) | Anthropic Claude API (extended thinking) |
-| API | Hono (Cloudflare Workers) |
-| Database | Cloudflare D1 |
-| Validation | Zod |
+| Layer | Technology | Notes |
+|---|---|---|
+| Frontend | Next.js 15, App Router, React | Server and client components |
+| AI (SIC) | Anthropic Claude API (`claude-opus-4-7`) | Extended thinking, 8k thinking budget |
+| Streaming | Server-Sent Events | Progressive AI report delivery |
+| Runtime | Cloudflare Workers | via @opennextjs/cloudflare |
+| Auth | Web Crypto API | httpOnly cookie session — no JWT library |
+| Validation | Zod | All API route payloads |
 
 ---
 
 ## Panels
 
-### Analytics
-- Platform-wide statistics: users, tracks, plays, revenue
-- Follower growth charts (daily/weekly/monthly)
-- Top content by play count and engagement
-- Subscription tier distribution
-- Error rate and uptime history
-
-### Users
-- Paginated user list with search and filter
-- User detail view: profile, tier, join date, activity
-- Actions: ban (with expiry), unban, verify artist, delete with full cascade cleanup
-- Soft-delete protection — hard delete triggers R2 cleanup for all associated files
-
-### Content
-- Track and post management with admin-level delete
-- Admin delete triggers R2 cleanup (audio, HLS segments, cover art) and cascades through 30+ related tables
-- Content flagging and status updates
-
-### Reports
-- Moderation queue — user-submitted content reports
-- AI auto-research: before a moderator reviews a report, the system automatically gathers context (profile history, report patterns, content metadata) and surfaces it as a structured brief
-- Action log: take action, update status, track resolution
-
-### Growth (Growth Report AI integration)
-- Real-time growth dashboard
-- Period-over-period comparisons
-- AI-generated narrative growth reports with streaming output
-
-### Creator Scoring (Influnx Calc integration)
-- Per-creator scoring across the Influnx 100-point system
-- Batch scoring for the full creator roster
-- Score trend history
+| Panel | Purpose | Key Actions |
+|---|---|---|
+| **Analytics** | Platform-wide stats: users, tracks, plays, revenue, error rates | Time-range filter, subscription distribution chart |
+| **Users** | User list with search and filter | Ban / unban, artist verify, delete with full cascade |
+| **Content** | Track + post management queue | Admin delete with R2 + HLS cleanup, content flagging |
+| **Reports** | Moderation queue with AI auto-research context | Take action, update status, track resolution |
+| **Growth** | Real-time growth analytics with AI narrative | Period-over-period comparison, streaming report |
+| **Creator Scoring** | Per-creator Influnx 100-point scoring | Batch scoring, score trend history |
+| **SIC** | Security Intelligence Center | Vulnerability scan, access control audit, compliance report |
 
 ---
 
 ## Security Intelligence Center (SIC)
 
-SIC is an AI-powered security analysis layer embedded in the admin console. It is not a passive dashboard — it actively analyzes the platform's security posture and generates actionable reports.
+SIC is an AI-powered security analysis layer embedded in the admin console. It actively analyzes the platform's security posture and generates actionable findings.
 
 ### Capabilities
 
 #### Vulnerability Assessment
-- Reviews known OWASP Top 10 patterns against the current API surface
+- Reviews OWASP Top 10 patterns against the current API surface
 - Flags endpoints missing auth, rate limiting, or input validation
 - Identifies IDOR risk patterns (endpoints accepting user-supplied resource IDs)
-- Checks for injection vectors in parameterized query patterns
+- Checks for injection vectors in query patterns
 
 #### Access Control Validation
-- Maps every API route to its auth requirement (public, JWT, admin key, signed webhook)
+- Maps every API route to its auth requirement (public / JWT / admin key / signed webhook)
 - Flags routes where auth type mismatches expected access level
 - Detects over-privileged endpoints (admin actions reachable by user JWT)
-- Validates CSRF exemption list — flags any non-exempt state-changing endpoints missing the header check
+- Validates CSRF exemption list — flags non-exempt state-changing endpoints missing the header check
 
 #### Compliance Reporting
 - GDPR surface map: which endpoints handle PII, which support deletion and export
-- Data retention audit: checks TTL settings on ephemeral tables (error_logs, uptime_checks, ws_tickets)
-- Soft-delete + hard-purge verification: confirms cascade completeness
-- Session management audit: token TTLs, rotation policy, revocation coverage
+- Data retention audit: checks TTL settings on ephemeral tables (error logs, uptime checks, WS tickets)
+- Soft-delete + hard-purge cascade completeness verification
+- Session management audit: rotation policy, revocation coverage
 
 #### Threat Modeling
 - Generates STRIDE-based threat model for critical flows (auth, payment, file upload, DMs)
-- Identifies trust boundary crossings and validates they have appropriate controls
-- Produces attack surface summary for use in security reviews
+- Identifies trust boundary crossings with control verification
+- Produces attack surface summary suitable for security reviews
+
+### How Extended Thinking Helps
+Security analysis requires multi-step reasoning across the entire API surface. Claude's extended thinking mode (8,000-token budget) works through auth flows, trust boundaries, and access patterns before producing findings — fewer false positives and more accurate severity ratings than a fast-path response.
 
 ### SIC API
 
 ```http
 POST /api/sic/scan
-X-Admin-Key: <key>
 Content-Type: application/json
 
 {
@@ -130,45 +127,49 @@ Response: `text/event-stream` — SIC report tokens streamed as SSE.
 
 ```http
 GET /api/sic/reports
-X-Admin-Key: <key>
+→ Paginated list of past SIC scan reports
 
-→ Paginated list of past SIC scan reports with score, scope, and findings count
-```
-
-```http
 GET /api/sic/reports/:id
-X-Admin-Key: <key>
-
 → Full report: findings, confidence scores, recommendations
 ```
 
 ---
 
-## Key Engineering Decisions
+## Security (Meta)
 
-### Extended thinking for security analysis
-Security analysis requires multi-step reasoning across the entire API surface. SIC uses Claude's extended thinking mode — the model works through auth flows, trust boundaries, and access patterns before producing findings. This produces fewer false positives and more accurate severity ratings than a fast-path response.
+The admin dashboard applies the same security standards it monitors:
 
-### Streaming SIC reports
-Security reports can be 2,000–8,000 tokens. Streaming via SSE means the first findings appear in under a second — the admin sees results as they're generated rather than waiting for the full report.
-
-### SIC as a separate auth context
-SIC endpoints require admin API key authentication — never JWT. Admin key auth is isolated from the user auth system. A compromised user JWT cannot access any SIC functionality.
-
-### Scan results persisted to D1
-Each SIC scan result is persisted with a timestamp, scope, and finding list. This builds a historical security posture record. The dashboard can show security score trends over time.
+- **Admin auth gate:** Middleware on all `/admin/*` routes — requests without a valid admin session cookie are rejected at the middleware layer, before any handler runs.
+- **httpOnly cookie:** Admin session stored in an httpOnly, Secure, SameSite=Strict cookie — not accessible to client JavaScript under any circumstance.
+- **Server-side session verification:** Every admin API route verifies the session on the server before executing any logic — no client-held auth state.
+- **Separate auth context:** Admin routes never accept a user JWT. A compromised user credential cannot reach any admin endpoint. Admin key and user JWT are completely separate auth systems.
+- **CSRF exemption:** Admin routes are explicitly exempted from the `X-Requested-With` check because they use API key auth instead — the exemption is intentional, not an oversight.
+- **Rate limiting:** Admin endpoints rate-limited to prevent brute-force against the admin key.
+- **Audit logging:** All admin actions logged to D1 with identity, action, target, and timestamp.
+- **No client-side auth state:** Zero `localStorage` or client-held tokens for admin sessions.
+- **Prompt injection mitigation:** User-generated content passed to AI as structured data with strict role separation — never interpolated into the system prompt.
 
 ---
 
-## Security (Meta)
+## Recent Additions
 
-The admin dashboard itself applies the security standards it monitors:
+- Deploy-status pill showing live Cloudflare deployment state in the Systems tab
+- Top-3 EV plays + daily summary Discord notification buttons in EV Betta panel
+- WebGL performance charts in admin analytics panel
 
-- **Admin auth** — API key required on all `/api/admin/*` routes; key validated via timing-safe comparison
-- **No JWT crossover** — admin routes never accept a user JWT; separate auth context
-- **CSRF exempt** — admin routes are explicitly exempted from the `X-Requested-With` check (they use API key auth instead)
-- **Rate limiting** — admin endpoints rate-limited to prevent brute-force on the API key
-- **Audit logging** — all admin actions logged to D1 with admin identity, action, target, and timestamp
+---
+
+## Running This
+
+```bash
+npm install
+
+npm run dev          # dev server
+npm run build        # production build
+npm run typecheck    # tsc --noEmit
+```
+
+See `.env.example` for required environment variables.
 
 ---
 
