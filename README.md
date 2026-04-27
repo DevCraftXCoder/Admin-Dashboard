@@ -74,6 +74,7 @@ Next.js 15  (App Router · admin auth gate)
 | **Reports** | Moderation queue with AI auto-research context | Take action, update status, track resolution |
 | **Growth** | Real-time growth analytics with AI narrative | Period-over-period comparison, streaming report |
 | **Creator Scoring** | Per-creator Influnx 100-point scoring | Batch scoring, score trend history |
+| **AttackMap** | Real-time security event visualization | Live IP geolocation, attack pattern detection, AI summary |
 | **SIC** | Security Intelligence Center | Vulnerability scan, access control audit, compliance report |
 
 ---
@@ -153,7 +154,8 @@ The admin dashboard applies the same security standards it monitors:
 
 ## Recent Additions
 
-- Deploy-status pill showing live Cloudflare deployment state in the Systems tab
+- **AttackMap tab** — Real-time security event visualization with 24h sparkline, live IP geolocation map, attack severity filtering, AI-powered threat summary, admin Discord buttons for top attacks
+- Deploy-status pill showing live Cloudflare deployment state
 - Top-3 EV plays + daily summary Discord notification buttons in EV Betta panel
 - WebGL performance charts in admin analytics panel
 
