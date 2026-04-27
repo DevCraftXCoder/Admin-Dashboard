@@ -39,7 +39,7 @@ Next.js 15  (App Router · admin auth gate)
   ├── Panel: Content          →  track + post moderation queue
   ├── Panel: Reports          →  content report queue + AI auto-research
   ├── Panel: Growth           →  growth analytics (→ Growth Report AI)
-  ├── Panel: Creator Scoring  →  influencer metrics (→ Influnx Calc)
+  ├── Panel: Creator Scoring  →  Influence Metrics (→ Calculation Framework)
   └── Panel: SIC              →  Security Intelligence Center
         │
         └── AI Security Engine  (Claude API · extended thinking)
