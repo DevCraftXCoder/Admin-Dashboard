@@ -39,7 +39,7 @@ Next.js 15  (App Router · admin auth gate)
   ├── Panel: Content          →  track + post moderation queue
   ├── Panel: Reports          →  content report queue + AI auto-research
   ├── Panel: Growth           →  growth analytics (→ Growth Report AI)
-  ├── Panel: Creator Scoring  →  Influence Metrics (→ Calculation Framework)
+  ├── Panel: Risk Signals  →  Influence Metrics (→ Detection Framework)
   └── Panel: SIC              →  Security Intelligence Center
         │
         └── AI Security Engine  (Claude API · extended thinking)
@@ -73,7 +73,7 @@ Next.js 15  (App Router · admin auth gate)
 | **Content** | Track + post management queue | Admin delete with R2 + HLS cleanup, content flagging |
 | **Reports** | Moderation queue with AI auto-research context | Take action, update status, track resolution |
 | **Growth** | Real-time growth analytics with AI narrative | Period-over-period comparison, streaming report |
-| **Creator Scoring** | Per-creator Influnx 100-point scoring | Batch scoring, score trend history |
+| **Risk Signals** | Per-creator Influnx 100-point scoring | Batch scoring, score trend history |
 | **AttackMap** | Real-time security event visualization | Live IP geolocation, attack pattern detection, AI summary |
 | **SIC** | Security Intelligence Center | Vulnerability scan, access control audit, compliance report |
 
