@@ -39,7 +39,7 @@ Next.js 15  (App Router · admin auth gate)
   ├── Panel: Content          →  track + post moderation queue
   ├── Panel: Reports          →  content report queue + AI auto-research
   ├── Panel: Growth           →  growth analytics (→ Growth Report AI)
-  ├── Panel: Risk Signals  →  Influence Metrics (→ Detection Framework)
+  ├── Panel: Risk Signals  →  Behavioral Signals (→ Detection Framework)
   └── Panel: SIC              →  Security Intelligence Center
         │
         └── AI Security Engine  (Claude API · extended thinking)
