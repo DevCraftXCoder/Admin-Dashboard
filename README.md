@@ -154,10 +154,10 @@ The admin dashboard applies the same security standards it monitors:
 
 ## Recent Additions
 
-- **AttackMap tab** — Real-time security event visualization with 24h sparkline, live IP geolocation map, attack severity filtering, AI-powered threat summary, admin Discord buttons for top attacks
-- Deploy-status pill showing live Cloudflare deployment state
-- Top-3 EV plays + daily summary Discord notification buttons in EV Betta panel
-- WebGL performance charts in admin analytics panel
+- **AttackMap interactive filters** — Legend chips now filter by attack type, Framer Motion micro-interactions, contrast + layered surfaces polish, collapsible panels
+- **SIC payment system** — Admin billing panel for SIC subscription management; public checkout endpoint hardened with exact-match auth allowlist
+- **EV Betta rescrape** — Rescrape picks button now triggers Discord notify-top3 in addition to D1 sync
+- **Growth Report AI fonts** — Swapped to Geist Sans + Geist Mono for improved readability
 
 ---
 
