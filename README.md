@@ -8,7 +8,7 @@
 
 **Multi-panel admin console with Security Intelligence Center (SIC) — AI-powered security analysis, vulnerability assessment, and access control validation.**
 
-> A full-featured platform operations dashboard with seven specialized panels. The Security Intelligence Center (SIC) tab uses Claude's extended thinking to audit the platform for vulnerabilities, validate access controls, and generate structured compliance reports.
+> A full-featured platform operations dashboard with seven specialized panels. The Security Intelligence Center (SIC) tab uses LLM extended thinking to audit the platform for vulnerabilities, validate access controls, and generate structured compliance reports.
 
 ---
 
@@ -42,7 +42,7 @@ Next.js 15  (App Router · admin auth gate)
   ├── Panel: Risk Signals  →  Behavioral Signals (→ Detection Framework)
   └── Panel: SIC              →  Security Intelligence Center
         │
-        └── AI Security Engine  (Claude API · extended thinking)
+        └── AI Security Engine  (LLM API · extended thinking)
               ├── Vulnerability Scanner
               ├── Access Control Validator
               ├── Compliance Reporter
@@ -56,7 +56,7 @@ Next.js 15  (App Router · admin auth gate)
 | Layer | Technology | Notes |
 |---|---|---|
 | Frontend | Next.js 15, App Router, React | Server and client components |
-| AI (SIC) | Anthropic Claude API (`claude-opus-4-7`) | Extended thinking, 8k thinking budget |
+| AI (SIC) | Anthropic LLM API (`LLM (Opus)`) | Extended thinking, 8k thinking budget |
 | Streaming | Server-Sent Events | Progressive AI report delivery |
 | Runtime | Cloudflare Workers | via @opennextjs/cloudflare |
 | Auth | Web Crypto API | httpOnly cookie session — no JWT library |
@@ -109,7 +109,7 @@ SIC is an AI-powered security analysis layer embedded in the admin console. It a
 - Produces attack surface summary suitable for security reviews
 
 ### How Extended Thinking Helps
-Security analysis requires multi-step reasoning across the entire API surface. Claude's extended thinking mode (8,000-token budget) works through auth flows, trust boundaries, and access patterns before producing findings — fewer false positives and more accurate severity ratings than a fast-path response.
+Security analysis requires multi-step reasoning across the entire API surface. LLM extended thinking mode (8,000-token budget) works through auth flows, trust boundaries, and access patterns before producing findings — fewer false positives and more accurate severity ratings than a fast-path response.
 
 ### SIC API
 
@@ -154,10 +154,10 @@ The admin dashboard applies the same security standards it monitors:
 
 ## Recent Additions
 
-- **AttackMap interactive filters** — Legend chips now filter by attack type, Framer Motion micro-interactions, contrast + layered surfaces polish, collapsible panels
-- **SIC payment system** — Admin billing panel for SIC subscription management; public checkout endpoint hardened with exact-match auth allowlist
-- **EV Betta rescrape** — Rescrape picks button now triggers Discord notify-top3 in addition to D1 sync
-- **Growth Report AI fonts** — Swapped to Geist Sans + Geist Mono for improved readability
+- DependencyHealth SCA card reworked — tiered actions, DependencyReviewModal, direct dep vs transitive breakdown
+- Uptime panel now direct-probes CF Workers when local stats-server is unreachable
+- Discover route added to Underground proxy whitelist
+- SIC integration: P0 security blockers resolved (magic-link email, rate-limit bypass)
 
 ---
 
