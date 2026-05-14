@@ -2,25 +2,13 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=flat&logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
-![Anthropic](https://img.shields.io/badge/Anthropic_Claude-D97706?style=flat&logo=anthropic&logoColor=white)
+![Anthropic](https://img.shields.io/badge/AI_Powered-D97706?style=flat&logo=anthropic&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat&logo=cloudflare&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 **Multi-panel admin console with Security Intelligence Center (SIC) — AI-powered security analysis, vulnerability assessment, and access control validation.**
 
 > A full-featured platform operations dashboard with seven specialized panels. The Security Intelligence Center (SIC) tab uses LLM extended thinking to audit the platform for vulnerabilities, validate access controls, and generate structured compliance reports.
-
----
-
-## Table of Contents
-
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Panels](#panels)
-- [Security Intelligence Center (SIC)](#security-intelligence-center-sic)
-- [Security (Meta)](#security-meta)
-- [Recent Additions](#recent-additions)
-- [Running This](#running-this)
 
 ---
 
@@ -56,7 +44,7 @@ Next.js 15  (App Router · admin auth gate)
 | Layer | Technology | Notes |
 |---|---|---|
 | Frontend | Next.js 15, App Router, React | Server and client components |
-| AI (SIC) | Anthropic LLM API (`LLM (Opus)`) | Extended thinking, 8k thinking budget |
+| AI (SIC) | LLM API (Opus) | Extended thinking, 8k thinking budget |
 | Streaming | Server-Sent Events | Progressive AI report delivery |
 | Runtime | Cloudflare Workers | via @opennextjs/cloudflare |
 | Auth | Web Crypto API | httpOnly cookie session — no JWT library |
@@ -161,20 +149,10 @@ The admin dashboard applies the same security standards it monitors:
 
 ---
 
-## Running This
-
-```bash
-npm install
-
-npm run dev          # dev server
-npm run build        # production build
-npm run typecheck    # tsc --noEmit
-```
-
-See `.env.example` for required environment variables.
-
----
-
 ## License
 
 MIT — see [LICENSE](LICENSE)
+
+---
+
+*Built by Frxncois — not open source.*
