@@ -2,157 +2,60 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=flat&logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
-![Anthropic](https://img.shields.io/badge/AI_Powered-D97706?style=flat&logo=anthropic&logoColor=white)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat&logo=cloudflare&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![LLM Powered](https://img.shields.io/badge/LLM_Powered-D97706?style=flat&logo=anthropic&logoColor=white)
 
-**Multi-panel admin console with Security Intelligence Center (SIC) — AI-powered security analysis, vulnerability assessment, and access control validation.**
+**Multi-panel admin console with AI-powered Security Intelligence Center.**
 
-> A full-featured platform operations dashboard with seven specialized panels. The Security Intelligence Center (SIC) tab uses LLM extended thinking to audit the platform for vulnerabilities, validate access controls, and generate structured compliance reports.
-
----
+> Platform operations dashboard with 7 specialized panels — including an embedded AI security scanner that runs LLM extended thinking to analyze vulnerabilities, validate access controls, and auto-research content reports before moderator review.
 
 ## Architecture
 
 ```
-Browser  (admin-authenticated)
-  │
-  ▼
-Next.js 15  (App Router · admin auth gate)
-  │
-  ├── Dashboard Shell  (sidebar nav · tab routing)
-  │
-  ├── Panel: Analytics        →  platform-wide stats + charts
-  ├── Panel: Users            →  user management · ban · verify · delete
-  ├── Panel: Content          →  track + post moderation queue
-  ├── Panel: Reports          →  content report queue + AI auto-research
-  ├── Panel: Growth           →  growth analytics (→ Growth Report AI)
-  ├── Panel: Risk Signals  →  Behavioral Signals (→ Detection Framework)
-  └── Panel: SIC              →  Security Intelligence Center
-        │
-        └── AI Security Engine  (LLM API · extended thinking)
-              ├── Vulnerability Scanner
-              ├── Access Control Validator
-              ├── Compliance Reporter
-              └── Threat Modeler
+Browser (admin auth)
+  └── Next.js 15 (admin gate)
+        └── 7 panels (routed tabs)
+              ├── Analytics Panel — platform-wide stats
+              ├── Users Panel — user management, bans, verification
+              ├── Content Panel — track management, R2 cleanup
+              ├── Reports Panel — AI auto-research + moderator queue
+              ├── Growth Panel — growth metrics and analytics
+              ├── Risk Signals Panel — detection framework, behavioral scoring
+              └── SIC Panel — AI Security Intelligence (LLM extended thinking)
 ```
-
----
 
 ## Tech Stack
 
-| Layer | Technology | Notes |
-|---|---|---|
-| Frontend | Next.js 15, App Router, React | Server and client components |
-| AI (SIC) | LLM API (Opus) | Extended thinking, 8k thinking budget |
-| Streaming | Server-Sent Events | Progressive AI report delivery |
-| Runtime | Cloudflare Workers | via @opennextjs/cloudflare |
-| Auth | Web Crypto API | httpOnly cookie session — no JWT library |
-| Validation | Zod | All API route payloads |
-
----
-
-## Panels
-
-| Panel | Purpose | Key Actions |
-|---|---|---|
-| **Analytics** | Platform-wide stats: users, tracks, plays, revenue, error rates | Time-range filter, subscription distribution chart |
-| **Users** | User list with search and filter | Ban / unban, artist verify, delete with full cascade |
-| **Content** | Track + post management queue | Admin delete with R2 + HLS cleanup, content flagging |
-| **Reports** | Moderation queue with AI auto-research context | Take action, update status, track resolution |
-| **Growth** | Real-time growth analytics with AI narrative | Period-over-period comparison, streaming report |
-| **Risk Signals** | Per-creator Influnx 100-point scoring | Batch scoring, score trend history |
-| **AttackMap** | Real-time security event visualization | Live IP geolocation, attack pattern detection, AI summary |
-| **SIC** | Security Intelligence Center | Vulnerability scan, access control audit, compliance report |
-
----
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 15 (App Router) |
+| AI | LLM API (extended thinking) |
+| Language | TypeScript |
+| Streaming | Server-Sent Events — AI reports streamed progressively |
 
 ## Security Intelligence Center (SIC)
 
-SIC is an AI-powered security analysis layer embedded in the admin console. It actively analyzes the platform's security posture and generates actionable findings.
+- **Real-time vulnerability scanning** via LLM with extended thinking — surfaces attack surface issues
+- **Access control validation** — tests privilege escalation paths against live auth logic
+- **Compliance reporting** — generates structured audit reports with remediation steps
+- **Auto-research on content reports** — gathers context (user history, post content, similar reports) before moderator review
+- **Risk scoring** — behavioral signals panel detects anomaly patterns in user activity
 
-### Capabilities
+## Panel Overview
 
-#### Vulnerability Assessment
-- Reviews OWASP Top 10 patterns against the current API surface
-- Flags endpoints missing auth, rate limiting, or input validation
-- Identifies IDOR risk patterns (endpoints accepting user-supplied resource IDs)
-- Checks for injection vectors in query patterns
+| Panel | Purpose |
+|-------|---------|
+| Analytics | Platform-wide stats, follower analytics, engagement trends |
+| Users | User list, ban/unban, verify artist, full profile + R2 deletion |
+| Content | Track management, admin delete with R2 + HLS cleanup |
+| Reports | AI auto-researched moderation queue, status tracking |
+| Growth | Growth metrics and period comparisons |
+| Risk Signals | Detection framework, behavioral scoring (formerly Creator Scoring) |
+| SIC | AI pentesting scanner — vulnerability analysis, access control tests, compliance reports |
 
-#### Access Control Validation
-- Maps every API route to its auth requirement (public / JWT / admin key / signed webhook)
-- Flags routes where auth type mismatches expected access level
-- Detects over-privileged endpoints (admin actions reachable by user JWT)
-- Validates CSRF exemption list — flags non-exempt state-changing endpoints missing the header check
+## Key Engineering
 
-#### Compliance Reporting
-- GDPR surface map: which endpoints handle PII, which support deletion and export
-- Data retention audit: checks TTL settings on ephemeral tables (error logs, uptime checks, WS tickets)
-- Soft-delete + hard-purge cascade completeness verification
-- Session management audit: rotation policy, revocation coverage
+- **Admin auth gate** with role-based panel access — no public routes
+- **AI reports streamed progressively** via SSE — no waiting for full LLM generation
+- **Embedded SIC scanner** architecture — see SIC repo for full tool list
+- **Auto-research pipeline** — content reports trigger background LLM context gathering
 
-#### Threat Modeling
-- Generates STRIDE-based threat model for critical flows (auth, payment, file upload, DMs)
-- Identifies trust boundary crossings with control verification
-- Produces attack surface summary suitable for security reviews
-
-### How Extended Thinking Helps
-Security analysis requires multi-step reasoning across the entire API surface. LLM extended thinking mode (8,000-token budget) works through auth flows, trust boundaries, and access patterns before producing findings — fewer false positives and more accurate severity ratings than a fast-path response.
-
-### SIC API
-
-```http
-POST /api/sic/scan
-Content-Type: application/json
-
-{
-  "scope": "access_control",          // vulnerability | access_control | compliance | threat_model | full
-  "target": "authentication_routes",  // optional — scope to specific area
-  "depth": "deep"                     // quick | standard | deep
-}
-```
-
-Response: `text/event-stream` — SIC report tokens streamed as SSE.
-
-```http
-GET /api/sic/reports
-→ Paginated list of past SIC scan reports
-
-GET /api/sic/reports/:id
-→ Full report: findings, confidence scores, recommendations
-```
-
----
-
-## Security (Meta)
-
-The admin dashboard applies the same security standards it monitors:
-
-- **Admin auth gate:** Middleware on all `/admin/*` routes — requests without a valid admin session cookie are rejected at the middleware layer, before any handler runs.
-- **httpOnly cookie:** Admin session stored in an httpOnly, Secure, SameSite=Strict cookie — not accessible to client JavaScript under any circumstance.
-- **Server-side session verification:** Every admin API route verifies the session on the server before executing any logic — no client-held auth state.
-- **Separate auth context:** Admin routes never accept a user JWT. A compromised user credential cannot reach any admin endpoint. Admin key and user JWT are completely separate auth systems.
-- **CSRF exemption:** Admin routes are explicitly exempted from the `X-Requested-With` check because they use API key auth instead — the exemption is intentional, not an oversight.
-- **Rate limiting:** Admin endpoints rate-limited to prevent brute-force against the admin key.
-- **Audit logging:** All admin actions logged to D1 with identity, action, target, and timestamp.
-- **No client-side auth state:** Zero `localStorage` or client-held tokens for admin sessions.
-- **Prompt injection mitigation:** User-generated content passed to AI as structured data with strict role separation — never interpolated into the system prompt.
-
----
-
-## Recent Additions
-
-- DependencyHealth SCA card reworked — tiered actions, DependencyReviewModal, direct dep vs transitive breakdown
-- Uptime panel now direct-probes CF Workers when local stats-server is unreachable
-- Discover route added to Underground proxy whitelist
-- SIC integration: P0 security blockers resolved (magic-link email, rate-limit bypass)
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE)
-
----
-
-*Built by Frxncois — not open source.*
