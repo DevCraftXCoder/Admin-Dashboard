@@ -17,10 +17,10 @@ Browser (admin auth)
               ├── Analytics Panel — platform-wide stats
               ├── Users Panel — user management, bans, verification
               ├── Content Panel — track management, R2 cleanup
-              ├── Reports Panel — AI auto-research + moderator queue
+              ├── Reports Panel — automated research + moderator queue
               ├── Growth Panel — growth metrics and analytics
               ├── Risk Signals Panel — detection framework, behavioral scoring
-              └── SIC Panel — AI Security Intelligence (LLM extended thinking)
+              └── SIC Panel — Automated Security Intelligence (LLM extended thinking)
 ```
 
 ## Tech Stack
@@ -28,9 +28,9 @@ Browser (admin auth)
 | Layer | Technology |
 |-------|-----------|
 | Framework | Next.js 15 (App Router) |
-| AI | LLM API (extended thinking) |
+| LLM | LLM API (extended thinking) |
 | Language | TypeScript |
-| Streaming | Server-Sent Events — AI reports streamed progressively |
+| Streaming | Server-Sent Events — automated reports streamed progressively |
 
 ## Security Intelligence Center (SIC)
 
@@ -47,15 +47,15 @@ Browser (admin auth)
 | Analytics | Platform-wide stats, follower analytics, engagement trends |
 | Users | User list, ban/unban, verify artist, full profile + R2 deletion |
 | Content | Track management, admin delete with R2 + HLS cleanup |
-| Reports | AI auto-researched moderation queue, status tracking |
+| Reports | auto-researched moderation queue, status tracking |
 | Growth | Growth metrics and period comparisons |
 | Risk Signals | Detection framework, behavioral scoring (formerly Creator Scoring) |
-| SIC | AI pentesting scanner — vulnerability analysis, access control tests, compliance reports |
+| SIC | automated pentesting scanner — vulnerability analysis, access control tests, compliance reports |
 
 ## Key Engineering
 
 - **Admin auth gate** with role-based panel access — no public routes
-- **AI reports streamed progressively** via SSE — no waiting for full LLM generation
+- **automated reports streamed progressively** via SSE — no waiting for full LLM generation
 - **Embedded SIC scanner** architecture — see SIC repo for full tool list
 - **Auto-research pipeline** — content reports trigger background LLM context gathering
 
