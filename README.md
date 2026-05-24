@@ -4,9 +4,9 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![LLM Powered](https://img.shields.io/badge/LLM_Powered-D97706?style=flat&logo=anthropic&logoColor=white)
 
-**Multi-panel admin console with AI-powered Security Intelligence Center.**
+**Multi-panel admin console with Intelligence-driven Security Intelligence Center.**
 
-> Platform operations dashboard with 7 specialized panels — including an embedded AI security scanner that runs LLM extended thinking to analyze vulnerabilities, validate access controls, and auto-research content reports before moderator review.
+> Platform operations dashboard with 7 specialized panels — including an embedded LLM security scanner that runs LLM extended thinking to analyze vulnerabilities, validate access controls, and auto-research content reports before moderator review.
 
 ## Architecture
 
